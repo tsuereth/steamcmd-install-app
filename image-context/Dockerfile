@@ -1,5 +1,5 @@
 FROM ubuntu:26.04
-LABEL description="https://github.com/tsuereth/steamcmd-install-app"
+LABEL org.opencontainers.image.description="https://github.com/tsuereth/steamcmd-install-app"
 
 # Install dependencies:
 # - curl to download the steamcmd package.
