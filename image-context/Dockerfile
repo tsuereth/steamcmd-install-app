@@ -1,5 +1,10 @@
 FROM ubuntu:26.04
+
+# Overwrite the base container's labels, which aren't relevant here.
 LABEL org.opencontainers.image.description="https://github.com/tsuereth/steamcmd-install-app"
+LABEL org.opencontainers.image.title="steamcmd-install-app"
+LABEL org.opencontainers.image.created=""
+LABEL org.opencontainers.image.version=""
 
 # Install dependencies:
 # - curl to download the steamcmd package.
