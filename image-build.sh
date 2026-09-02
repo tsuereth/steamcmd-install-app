@@ -22,3 +22,8 @@ fi
 VERSION_TAG=version-${STEAMCMD_VERSION}
 echo Tagging build: ${IMAGE_NAME}:${VERSION_TAG}
 docker tag ${IMAGE_NAME}:${BUILDTIME_TAG} ${IMAGE_NAME}:${VERSION_TAG}
+
+if [ "${IMAGE_PUBLISH}" == "true" ]; then
+	docker push ${IMAGE_NAME}:${BUILDTIME_TAG}
+	docker push ${IMAGE_NAME}:${VERSION_TAG}
+fi
