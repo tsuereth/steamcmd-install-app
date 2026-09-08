@@ -77,6 +77,21 @@ while [ $ATTEMPT_NUM -lt $ATTEMPT_MAX ]; do
 	INSTALL_RESULT_NOERROR=$(printf %s "${INSTALL_RESULT_LOGLINE}" | grep '(result No Error,')
 	if [ -z "${INSTALL_RESULT_NOERROR}" ]; then
 		echo Non-success result: ${INSTALL_RESULT_LOGLINE}
+
+		# Time for hacky workaround checks. Yay!
+		# Sometimes the installed application manifest becomes "stuck"
+		# in a state that SteamCMD considers invalid, but cannot repair.
+		# Simply deleting the manifest file will prompt SteamCMD to
+		# re-create it using existing install data.
+		APPMANIFEST_FILEPATH=${APP_INSTALL_DIR}/steamapps/appmanifest_${STEAM_APP_ID}.acf
+		if [ -f "${APPMANIFEST_FILEPATH}" ]; then
+			APPMANIFEST_UPDATERESULT=$(grep "UpdateResult" ${APPMANIFEST_FILEPATH} | grep --only-matching '[0-9]*')
+			if [ "${APPMANIFEST_UPDATERESULT}" != "0" ]; then
+				echo Non-zero UpdateResult "${APPMANIFEST_UPDATERESULT}" in app manifest, deleting for next attempt: ${APPMANIFEST_FILEPATH}
+				rm -f ${APPMANIFEST_FILEPATH}
+			fi
+		fi
+
 		continue
 	fi
 
