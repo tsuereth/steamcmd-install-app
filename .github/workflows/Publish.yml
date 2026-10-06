@@ -2,6 +2,9 @@ name: Publish
 
 on:
   workflow_dispatch:
+  # Run on a schedule to keep up with SteamCMD updates.
+  schedule:
+    - cron: '0 12 * * 5'
 
 jobs:
   Publish:
