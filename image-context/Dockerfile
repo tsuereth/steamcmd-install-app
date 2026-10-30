@@ -8,11 +8,11 @@ LABEL org.opencontainers.image.version=""
 
 # Install dependencies:
 # - curl to download the steamcmd package.
-# - lib32gcc as a runtime dependency of steamcmd.
+# - lib32gcc and lib32stdc++ as runtime dependencies of steamcmd.
 # - locale-gen to set up a default locale for steamcmd.
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && \
-	apt install -y curl lib32gcc-s1 locales && \
+	apt install -y curl lib32gcc-s1 lib32stdc++6 locales && \
 	rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8
 
