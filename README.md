@@ -1,6 +1,6 @@
 `steamcmd-install-app` is a containerized tool for installing and/or updating a (publicly-available, Linux-compatible) Steam application to a host-mounted volume.
 
-- It relies on the SteamCMD tool [provided by Valve](https://developer.valvesoftware.com/wiki/SteamCMD). This image uses a _very specific subset_ of SteamCMD functionality to install and update Steam applications. Additional functionality is outside the scope of this repository.
+- It relies on the SteamCMD tool [provided by Valve](https://developer.valvesoftware.com/wiki/SteamCMD) and setup [from the open-source community](https://github.com/steamcmd/docker/). This image uses a _very specific subset_ of SteamCMD functionality to install and update Steam applications. Additional functionality is outside the scope of this repository.
 
 The expected usage of this container image is to initialize application data, like a game's dedicated server executable, for a follow-up runtime environment. In other words:
 

@@ -35,12 +35,16 @@ if [ ! -d "${APP_INSTALL_DIR}" ]; then
 	mkdir -p ${APP_INSTALL_DIR}
 fi
 
-# steamcmd should already have been installed, and its wrapper script
-# `steamcmd.sh` should be available in the current working directory.
+# steamcmd should already have been installed, and be in $PATH.
 # If not, then the environment has been screwed up somehow!
-if [ ! -x "./steamcmd.sh" ]; then
-	echo Unexpected error: ./steamcmd.sh is not executable
+if [ -z "$(which steamcmd)" ]; then
+	echo Unexpected error: steamcmd not found
 	exit 255
+fi
+
+if [ -z "${STEAM_DATADIR}" ]; then
+	STEAM_DATADIR=${HOME}/Steam
+	echo STEAM_DATADIR was undefined, defaulting to ${STEAM_DATADIR}
 fi
 
 # Often, a steam service error will block an app-update check, but
@@ -57,9 +61,9 @@ while [ $ATTEMPT_NUM -lt $ATTEMPT_MAX ]; do
 
 	STEAMCMD_INSTALLARGS="+force_install_dir ${APP_INSTALL_DIR} +login anonymous +app_update ${STEAM_APP_ID} validate +quit"
 	echo Running steamcmd with arguments: ${STEAMCMD_INSTALLARGS}
-	./steamcmd.sh ${STEAMCMD_INSTALLARGS}
+	steamcmd ${STEAMCMD_INSTALLARGS}
 
-	CONTENT_LOG_FILEPATH=${HOME}/Steam/logs/content_log.txt
+	CONTENT_LOG_FILEPATH=${STEAM_DATADIR}/logs/content_log.txt
 	if [ ! -f "${CONTENT_LOG_FILEPATH}" ]; then
 		echo No content log file found at ${CONTENT_LOG_FILEPATH}
 		continue
