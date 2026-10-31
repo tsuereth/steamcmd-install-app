@@ -8,11 +8,11 @@ LABEL org.opencontainers.image.version=""
 
 # Install dependencies:
 # - curl to download the steamcmd package.
-# - lib32gcc and lib32stdc++ as runtime dependencies of steamcmd.
+# - lib32gcc as a runtime dependency of steamcmd.
 # - locale-gen to set up a default locale for steamcmd.
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt update && \
-	apt install -y curl lib32gcc-s1 lib32stdc++6 locales && \
+	apt install -y curl lib32gcc-s1 locales && \
 	rm -rf /var/lib/apt/lists/*
 RUN locale-gen en_US.UTF-8
 
@@ -26,7 +26,8 @@ WORKDIR /steamcmd-workdir
 RUN curl --location --fail --silent --show-error "https://client-update.steamstatic.com/installer/steamcmd_linux.tar.gz" | tar zxvf -
 
 # Run steamcmd once to bootstrap / self-update it.
-RUN ./steamcmd.sh +login anonymous +quit
+RUN mkdir -p ./Steam/logs && chmod 0777 ./Steam/logs
+RUN ./steamcmd.sh +login anonymous +quit || (echo SteamCMD bootstrap failed, showing log contents && echo --- && for LOGFILE in $(find ./Steam/logs -type f); do echo ${LOGFILE} && echo --- && cat ${LOGFILE} && echo ---; done && echo Done showing logs && exit 2)
 
 # Create a volume for installing an app with steamcmd.
 # Install an app to this volume on the host like:
