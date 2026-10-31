@@ -27,7 +27,8 @@ RUN curl --location --fail --silent --show-error "https://client-update.steamsta
 
 # Run steamcmd once to bootstrap / self-update it.
 RUN mkdir -p ./Steam/logs && chmod 0777 ./Steam/logs
-RUN ./steamcmd.sh +login anonymous +quit || (echo SteamCMD bootstrap failed, showing log contents && echo --- && for LOGFILE in $(find ./Steam/logs -type f); do echo ${LOGFILE} && echo --- && cat ${LOGFILE} && echo ---; done && echo Done showing logs && exit 2)
+COPY show-logs.sh /
+RUN ./steamcmd.sh +login anonymous +quit || (echo SteamCMD bootstrap failed && /show-logs.sh && exit 2)
 
 # Create a volume for installing an app with steamcmd.
 # Install an app to this volume on the host like:
